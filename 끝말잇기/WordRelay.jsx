@@ -1,9 +1,10 @@
-import React, { useState }from 'react';
+import React, { useState, useRef } from 'react';
 
 const WordRelay = () => {
   const [word, changeWord] = useState("김현주");
   const [value, changeValue] = useState("");
   const [result, changeResult] = useState("");
+  const inputRef = useRef(null);
 
 
 const handelSubmit = (e) => {
@@ -12,19 +13,22 @@ const handelSubmit = (e) => {
     changeResult('딩동댕');
     changeWord(value);
     changeValue("");
+    inputRef.current.focus();
   } else {
     changeResult('땡');
     changeValue("");
+    inputRef.current.focus();
   }
 }
 
     return (
       <div>
         <h1>끝말잇기!</h1>
-        <form onSubmit={(e) => handelSubmit(e)}>
+        <form onSubmit={handelSubmit}>
           <label>
             <p>시작 단어 : {word}</p>
             <input 
+              ref={inputRef}
               value={value} 
               type="text" 
               onChange={
