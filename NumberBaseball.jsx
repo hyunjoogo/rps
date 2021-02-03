@@ -28,7 +28,12 @@ class NumberBaseball extends Component {
   
   onSubmitForm = (e) => {
     e.preventDefault();
-    // 숫자 아닐 때 경과 넣어줘야 함
+    if (this.state.value.length !== 4) {
+      this.setState({
+        result: "다시 확인해주세요😊"
+      })
+      return;
+    }
     if (this.state.value === this.state.answer.join("")) {
       this.setState({
         result : "Hooooom Run 🎉🎉🎉",
@@ -77,10 +82,10 @@ class NumberBaseball extends Component {
   return (
     <div>
       <h1>숫자 게임</h1>
-
+      <span> {this.state.end ? "다시하기 버튼을 눌러주세요" : "숫자 1~9 / 중복X / 4자리"} </span>
       <p>결과 : {this.state.result}</p>
       <form onSubmit={this.onSubmitForm}>
-      <input disabled={this.state.end} maxLength={4} value={this.state.value} onChange={this.onChangeInput} />
+      <input type="number" disabled={this.state.end} value={this.state.value} onChange={this.onChangeInput} placeholder="4자리 숫자를 입력하세요" />
         <input type="submit" disabled={this.state.end} />
       </form>
       <br />
