@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import Try from './Try'
 
-function getNumber() {
+const getNumber = () => {
   const candidate = [1,2,3,4,5,6,7,8,9];
   const array = []
   for (let i=0; i <4; i+=1) {
@@ -13,91 +13,79 @@ function getNumber() {
   return array;
 }
 
-class NumberBaseball extends Component {
-  state = {
-    end: false,
-    result: "", // 이번 결과
-    value: "", // 사용자 입력값
-    answer : getNumber(), // ex [1,3,5,7]
-    tries : [], // 몇번째 시도인지, 이전 결과값들
+const NumberBaseball = () => {
+  const [end, changeEnd] = useState(false);
+  const [result, changeResult] = useState("");
+  const [value, changeValue] = useState("");
+  const [answer, changeAnswer] = useState(getNumber());
+  const [tries, changeTries] = useState([]);
+
+  const onChangeInput = (e) => {
+    changeValue(e.target.value);
   };
 
-  onChangeInput = (e) => {
-    this.setState({value : e.target.value});
-  };
-  
-  onSubmitForm = (e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault();
-    if (this.state.value.length !== 4) {
-      this.setState({
-        result: "다시 확인해주세요😊"
-      })
+    if (value.length !== 4) {
+      changeResult("다시 확인해주세요😊");
       return;
     }
-    if (this.state.value === this.state.answer.join("")) {
-      this.setState({
-        result : "Hooooom Run 🎉🎉🎉",
-        tries: [...this.state.tries, {try: this.state.value, result: "홈런"}],
-        value:"",
-        end: true
-      })
+    if (value === answer.join("")) {
+      changeResult("Hooooom Run 🎉🎉🎉");
+      changeTries((prevTries) => {
+        return [...prevTries, {try: value, result: "홈런"}]});
+      changeValue("");
+      changeEnd(true);
     } else {
-      const userArray = this.state.value.split('').map((v) => parseInt(v)); // 사용자 입력 배열
+      const userArray = value.split('').map((v) => parseInt(v)); // 사용자 입력 배열
       let strike = 0;
       let ball =0;
-      if (this.state.tries.length >=9) {
-        this.setState({
-          result : `OUT!!!😥 숫자는 ${this.state.answer.join("")}`,
-          tries: [...this.state.tries, {try: this.state.value, result: `${strike} Strike, ${ball} Ball`}],
-          value:"",
-          end: true
-        })
+      if (tries.length >=9) {
+        changeResult(`OUT!!!😥 숫자는 ${answer.join("")}`);
+        changeTries((prevTries) => ([...prevTries, {try: value, result: `${strike} Strike, ${ball} Ball`}]));
+        changeValue("");
+        changeEnd(true);
       } else {
         for (let i=0; i <4; i+=1) {
-          if (this.state.answer[i] === userArray[i]){ // 자리 , 숫자 같을 때
+          if (answer[i] === userArray[i]){ // 자리 , 숫자 같을 때
             strike++;
-          } else if (this.state.answer.includes(userArray[i])) { // 숫자 같고 자리 다를 때
+          } else if (answer.includes(userArray[i])) { // 숫자 같고 자리 다를 때
             ball++;
           }}
-        this.setState({
-          result : `${strike} Strike, ${ball} Ball`,
-          tries: [...this.state.tries, {try: this.state.value, result: `${strike} Strike, ${ball} Ball`}],
-          value:"",
-        })
+        changeResult(`${strike} Strike, ${ball} Ball`);
+        changeTries((prevTries) => ([...prevTries, {try: value, result: `${strike} Strike, ${ball} Ball`}]));
+        changeValue("");
       }
     }
     };
-    resetGame= () => {
-      this.setState({
-        end: false,
-        result: "",
-        value: "",
-        answer : getNumber(),
-        tries : [], 
-      })
+
+    const resetGame= () => {
+      changeEnd(false);
+      changeResult("");
+      changeValue("");
+      changeAnswer(getNumber());
+      changeTries([]);
     }
-
-
-  render() {
   return (
     <div>
       <h1>숫자 게임</h1>
-      <span> {this.state.end ? "다시하기 버튼을 눌러주세요" : "숫자 1~9 / 중복X / 4자리"} </span>
-      <p>결과 : {this.state.result}</p>
-      <form onSubmit={this.onSubmitForm}>
-      <input type="number" disabled={this.state.end} value={this.state.value} onChange={this.onChangeInput} placeholder="4자리 숫자를 입력하세요" />
-        <input type="submit" disabled={this.state.end} />
+      <span> {end ? "다시하기 버튼을 눌러주세요" : "숫자 1~9 / 중복X / 4자리"} </span>
+      <p>결과 : {result}</p>
+      <form onSubmit={onSubmitForm}>
+      <input type="number" disabled={end} value={value} onChange={onChangeInput} placeholder="4자리 숫자를 입력하세요" />
+        <input type="submit" disabled={end} />
       </form>
       <br />
-      <button disabled={!this.state.end} onClick={this.resetGame}>다시하기</button>
-      <p>시도 : {this.state.tries.length} </p>
+      <button disabled={!end} onClick={resetGame}>다시하기</button>
+      <p>시도 : {tries.length} </p>
       <ul>
-        {this.state.tries.map((_try,index) => {
-          return (<Try key={index} _try={_try} />)
+        {tries.map((_try,index) => {
+          return (<Try key={index} tryInfo={_try} />)
         })}
       </ul>
     </div>
-  )}
-}  
+  )
+}
 
-export default NumberBaseball;
+
+  export default NumberBaseball;
