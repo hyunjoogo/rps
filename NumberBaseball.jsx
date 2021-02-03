@@ -2,8 +2,14 @@ import React, {Component} from 'react';
 import Try from './Try'
 
 function getNumber() {
-  const randomNumber = Math.random();
-  return Math.floor( randomNumber * 10000 )
+  const candidate = [1,2,3,4,5,6,7,8,9];
+  const array = []
+  for (let i=0; i <4; i+=1) {
+    const chosen = 
+    candidate.splice(Math.floor(Math.random() * (9-i)),1)[0];
+    array.push(chosen);
+  }
+  return array;
 }
 
 class NumberBaseball extends Component {
@@ -33,6 +39,7 @@ tries = [
   return (
     <div>
       <h1>숫자 게임</h1>
+      <p>{this.state.answer}</p>
       <p>{this.state.result}</p>
       <form onSubmit={this.onSubmitForm}>
       <input maxLength={4} value={this.state.value} onChange={this.onChangeInput} />
@@ -41,8 +48,7 @@ tries = [
       <p>시도 : {this.state.try.length} </p>
       <ul>
         {this.tries.map((_try) => {
-          // console.log(_try.try)
-          return (<Try key={_try.try} _try={_try} />) // index는 바꿔야할듯
+          return (<Try key={_try.try} _try={_try} />)
         })}
       </ul>
     </div>
