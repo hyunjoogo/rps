@@ -27,7 +27,10 @@ module.exports = {
             ],
             "@babel/preset-react",
           ],
-          plugins: ["react-refresh/babel"],
+          plugins: [
+            "react-refresh/babel",
+            "@babel/plugin-proposal-class-properties",
+          ],
         },
         exclude: path.join(__dirname, "node_modules"),
       },
