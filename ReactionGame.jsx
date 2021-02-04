@@ -15,6 +15,9 @@ class ReactionGame extends Component {
     result : [],
 
   }
+  timeout;
+  startTime;
+  endTime;
 
   onClickScreen = () => {
     const {result, status, message} = this.state
@@ -23,20 +26,28 @@ class ReactionGame extends Component {
         status : "start",
         message: "초록색 화면이 나오면 클릭하세요."
       })
-      setTimeout(()=>{
+      this.timeout = setTimeout(()=>{
         this.setState({
           status : "now",
-          message : "클릭하세요!!"
-        })
+          message : "클릭!!"
+        });
+        this.startTime = new Date();
       }, getTime())
     } else if(status === "start") {
-
-    } else if(status === "now") {
+      clearTimeout(this.timeout);
       this.setState({
-        status: "ready",
-        message: "클릭해서 시작하세요!",
-        result: [],
+        status : "ready",
+        message: "이런 성급하시군요. 초록색이 된 후 클릭하세요. 클릭하시면 다시 시작합니다."
       })
+    } else if(status === "now") {
+      this.endTime = new Date();
+      this.setState((prevState) => {
+        return {
+          status: "ready",
+          message: "클릭해서 시작하세요!",
+          result: [...prevState.result, this.endTime - this.startTime],
+        }
+      });
     }
 
 
@@ -49,7 +60,6 @@ class ReactionGame extends Component {
         <div 
           id="screen"
           className={status} 
-          style={{}}
           onClick={this.onClickScreen}>
           {message}
         </div>
