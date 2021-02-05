@@ -2,7 +2,7 @@ const path = require("path");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 module.exports = {
-  name: "Rock-Paper-Scissors-dev",
+  name: "Reaction-Game-dev",
   mode: "development",
   devtool: "inline-source-map",
   resolve: {

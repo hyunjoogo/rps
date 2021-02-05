@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ReactionGame from './ReactionGame';
+import RPS from './RPS';
 
-ReactDOM.render(<ReactionGame />, document.querySelector('#root'));
+ReactDOM.render(<RPS />, document.querySelector('#root'));
