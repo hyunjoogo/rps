@@ -1,16 +1,40 @@
 import React, {Component} from 'react';
 
-class RPS extends Component{
+
+const rockUrl = "./src/img/r.png"
+const paperUrl = "./src/img/p.png"
+const scissorsUrl = "./src/img/s.png"
+
+class RPS extends Component{  
   state = {
-    img : "./src/img/r.png",
+    img : rockUrl,
     score : "",
     result : "",
   }
+  
+  interval;
 
-  onClickBtn = (item) => {
-
+  componentDidMount() {
+  this.interval = setInterval(()=>{
+    const {img} = this.state;
+    if (img === rockUrl) {
+      this.setState({
+        img: paperUrl
+      })
+    } else if (img === paperUrl) {
+      this.setState({
+        img: scissorsUrl
+      })
+    } else if (img === scissorsUrl) {
+      this.setState({
+        img: rockUrl
+      })
+    }
+  }, 1000)
   }
-
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   render() {
     const {result, score, img} = this.state;
     return(
@@ -38,3 +62,18 @@ class RPS extends Component{
 }
 
 export default RPS;
+
+// const {img} = this.state;
+// if (img === "./src/img/r.png") {
+//   this.setState({
+//     img: "./src/img/p.png"
+//   })
+// } else if (img === "./src/img/p.png") {
+//   this.setState({
+//     img: "./src/img/s.png"
+//   })
+// } else if (img === "./src/img/s.png") {
+//   this.setState({
+//     img: "./src/img/r.png"
+//   })
+// }
