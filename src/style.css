@@ -1,0 +1,72 @@
+/* 사용자 버튼 체인지 */
+
+.btn-scisscors:active {
+  content: url("../img/btn_rps_scissors_active.png");
+}
+
+.btn-paper:active {
+  content: url("../img/btn_rps_paper_active.png");
+}
+
+.btn-rock:active {
+  content: url("../img/btn_rps_rock_active.png");
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+/* 손 바뀌는 영역 */
+
+.motion-area {
+  background-image: url("../img/bg.png");
+  background-size: contain;
+  width: 520px;
+  height: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 60px;
+}
+
+/* 결과버튼 */
+
+.result_draw,
+.result_lose,
+.result_win_lt,
+.result_win_rt {
+  position: absolute;
+}
+
+.result_draw {
+  right: -10%;
+  bottom: -8%;
+}
+
+.result_lose {
+  right: 57%;
+  bottom: -8%;
+}
+
+.result_win_lt {
+  left: -10%;
+  top: -8%;
+}
+.result_win_rt {
+  left: 56%;
+  top: -8%;
+}
+
+/* 불들어오는거 임시방편 */
+.result_lose:active {
+  content: url("../img/result_lose_on.png");
+}
+
+.result_draw:active {
+  content: url("../img/result_draw_on.png");
+}
