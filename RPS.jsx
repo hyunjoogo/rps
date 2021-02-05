@@ -5,6 +5,14 @@ const rockUrl = "./src/img/r.png"
 const paperUrl = "./src/img/p.png"
 const scissorsUrl = "./src/img/s.png"
 
+const scores = {
+  rock : 0,
+  paper : 2,
+  scissors : 1,
+
+  
+}
+
 class RPS extends Component{  
   state = {
     img : rockUrl,
@@ -35,6 +43,17 @@ class RPS extends Component{
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+
+  onClickBtn = (choice) => {
+    clearInterval(this.interval);
+    // 결과 
+    const myScore = scores[choice];
+    const ComScore = scores[this.state.img]
+    console.log(this.state.img)
+    console.log(ComScore)
+    console.log(myScore);
+    // 다시 시작
+  }
   render() {
     const {result, score, img} = this.state;
     return(
@@ -44,15 +63,15 @@ class RPS extends Component{
           <img 
             src="./src/img/btn_rock.png" 
             alt="rock-button" 
-            onClick={()=>onClickBtn('rock')} />
+            onClick={()=>this.onClickBtn('rock')} />
           <img 
             src="./src/img/btn_paper.png" 
             alt="paper-button"
-            onClick={()=>onClickBtn('paper')} />
+            onClick={()=>this.onClickBtn('paper')} />
           <img 
             src="./src/img/btn_scissors.png" 
             alt="scissors-button"
-            onClick={()=>onClickBtn('scissors')} />
+            onClick={()=>this.onClickBtn('scissors')} />
         </div>
         <div>{result}</div>
         <div>현재 {score} 점</div>
