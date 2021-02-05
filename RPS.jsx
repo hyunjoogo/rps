@@ -1,44 +1,47 @@
 import React, {Component} from 'react';
 
-
-const rockUrl = "./src/img/r.png"
-const paperUrl = "./src/img/p.png"
-const scissorsUrl = "./src/img/s.png"
-
 const scores = {
   rock : 0,
   paper : 2,
   scissors : 1,
-
-  
+  "./src/img/r.png" : 0,
+  "./src/img/p.png" : 2,
+  "./src/img/s.png" : 1,
 }
 
+let SPEED = 1000;
+
 class RPS extends Component{  
+  rockUrl = "./src/img/r.png"
+  paperUrl = "./src/img/p.png"
+  scissorsUrl = "./src/img/s.png"
+
   state = {
-    img : rockUrl,
-    score : "",
+    img : this.rockUrl,
     result : "",
   }
   
   interval;
-
-  componentDidMount() {
-  this.interval = setInterval(()=>{
+  
+  changeHand = () => {
     const {img} = this.state;
-    if (img === rockUrl) {
+    if (img === this.rockUrl) {
       this.setState({
-        img: paperUrl
+        img: this.paperUrl
       })
-    } else if (img === paperUrl) {
+    } else if (img === this.paperUrl) {
       this.setState({
-        img: scissorsUrl
+        img: this.scissorsUrl
       })
-    } else if (img === scissorsUrl) {
+    } else if (img === this.scissorsUrl) {
       this.setState({
-        img: rockUrl
+        img: this.rockUrl
       })
     }
-  }, 1000)
+  }
+
+  componentDidMount() {
+  this.interval = setInterval(this.changeHand, SPEED)
   }
   componentWillUnmount() {
     clearInterval(this.interval);
@@ -49,13 +52,31 @@ class RPS extends Component{
     // 결과 
     const myScore = scores[choice];
     const ComScore = scores[this.state.img]
-    console.log(this.state.img)
-    console.log(ComScore)
-    console.log(myScore);
+    const gameScore = myScore - ComScore
+    console.log(gameScore, myScore, ComScore);
+    if (gameScore === 0) {
+      console.log('비김')
+      this.setState({
+        result : "다시!"
+      })
+      this.interval = setInterval(this.changeHand, SPEED)
+    } else if ([-1, 2].includes(gameScore)) {
+      console.log('유저 윈')
+      this.setState({
+        result : "이겼다!!"
+      })
+      //돌려돌려
+    } else if ([1, -2].includes(gameScore)) {
+      console.log('컴퓨터 윈')
+      this.setState({
+        result : "졌다😥😥😥"
+      })
+      //다시 하시겠습니까?
+    }
     // 다시 시작
   }
   render() {
-    const {result, score, img} = this.state;
+    const {result, img} = this.state;
     return(
       <div>
         <img src={img} alt="rock" />
@@ -73,8 +94,8 @@ class RPS extends Component{
             alt="scissors-button"
             onClick={()=>this.onClickBtn('scissors')} />
         </div>
+        <div>한국도박문제 관리센터 : 전화상담 국번없이 1336 (24시간)</div>
         <div>{result}</div>
-        <div>현재 {score} 점</div>
       </div>
     )
   }
