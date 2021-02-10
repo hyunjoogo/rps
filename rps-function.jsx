@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
+
 
 const scores = {
   rock : 0,
@@ -36,19 +37,12 @@ const RPS = () => {
   const paperUrl = "./img/p.png"
   const scissorsUrl = "./img/s.png"
 
+  const [playing, setPlaying] = useState(true);
   const [img, setImg] = useState(rockUrl);
   const [result, setResult] = useState("");
   const interval = useRef();
 
-  useEffect(()=>{
-    console.log("useEffect")
-    interval.current = setInterval(changeHand, SPEED);
-    return () => {
-      clearInterval(interval.current)
-    }
-  })
-
-  const changeHand = () => {
+  const changeHand = useCallback(() => {
     console.log(img)
     if (img === rockUrl) {
       setImg(paperUrl)
@@ -57,8 +51,17 @@ const RPS = () => {
     } else if (img === scissorsUrl) {
       setImg(rockUrl)
     }
-  }
-
+  }, [img]);
+  
+  useEffect(()=>{
+    if (playing) {
+      interval.current = setInterval(changeHand, SPEED);
+    }
+    return () => {
+      clearInterval(interval.current)
+    };
+  }, [changeHand, playing])
+  
   const playSound = (sound) => {
     sound.currentTime = 0;
     sound.play();
@@ -70,12 +73,13 @@ const RPS = () => {
     const ComScore = scores[img]
     const gameScore = myScore - ComScore
     if(gameScore=== 0 ) {
+      setPlaying(false);
       setResult("비겼다!");
       playSound(draw);
-      setTimeout(()=>{
-        useEffect
+      setTimeout(() => {
+        setPlaying(true);
+        console.log('다시시작')
         playSound(start);
-        console.log('setTimeout')
       }, 1000);
     } else if ([-1, 2].includes(gameScore)) {
       setResult("이겼다!!");
